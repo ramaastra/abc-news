@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model User {
+  id        Int          @id @default(autoincrement())
+  email     String       @unique
+  username  String       @unique
+  password  String
+  firstName String       @map("first_name")
+  lastName  String       @map("last_name")
+  role      Role
+  news      News[]
+  profile   UserProfile?
+
+  @@map("users")
+}
+
+model UserProfile {
+  id         Int      @id @default(autoincrement())
+  pictureUrl String?  @map("picture_url")
+  birthDate  DateTime @db.Date
+  domicile   String
+  userId     Int      @unique
+  user       User     @relation(fields: [userId], references: [id])
+
+  @@map("user_profiles")
+}
+
+model News {
+  id         Int          @id @default(autoincrement())
+  slug       String       @unique
+  headline   String       @db.VarChar(60)
+  content    String
+  pictureUrl String?      @map("picture_url")
+  isApproved Boolean      @default(false) @map("is_approved")
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @default(now()) @map("updated_at")
+  categoryId Int          @map("category_id")
+  authorId   Int          @map("author_id")
+  category   NewsCategory @relation(fields: [categoryId], references: [id])
+  author     User         @relation(fields: [authorId], references: [id])
+
+  @@map("news")
+}
+
+model NewsCategory {
+  id          Int    @id @default(autoincrement())
+  slug        String @unique
+  name        String @unique @db.VarChar(30)
+  description String
+  news        News[]
+
+  @@map("news_categories")
+}
