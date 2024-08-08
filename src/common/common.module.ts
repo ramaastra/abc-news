@@ -1,4 +1,5 @@
 import { Global, Module } from '@nestjs/common';
+import { APP_FILTER } from '@nestjs/core';
 import { ErrorFilter } from './error.filter';
 import { PrismaService } from './prisma.service';
 import { BcryptService } from './bcrypt.service';
@@ -6,7 +7,15 @@ import { ValidationService } from './validation.service';
 
 @Global()
 @Module({
-  providers: [ErrorFilter, PrismaService, BcryptService, ValidationService],
+  providers: [
+    PrismaService,
+    BcryptService,
+    ValidationService,
+    {
+      provide: APP_FILTER,
+      useClass: ErrorFilter,
+    },
+  ],
   exports: [PrismaService, BcryptService, ValidationService],
 })
 export class CommonModule {}
