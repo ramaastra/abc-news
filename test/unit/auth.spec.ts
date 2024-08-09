@@ -81,4 +81,59 @@ describe('AuthService', () => {
       expect(result.role).toBe('USER');
     });
   });
+
+  describe('login()', () => {
+    beforeAll(async () => {
+      await testService.deleteUser();
+      await testService.createUser();
+    });
+
+    it('should be rejected if request is invalid', async () => {
+      try {
+        await authService.login({
+          email: 'testuser',
+          password: '',
+        });
+      } catch (error) {
+        expect(error).toBeDefined();
+      }
+    });
+
+    it('should be rejected if email is not registered', async () => {
+      try {
+        await authService.login({
+          email: 'user@gmail.com',
+          password: '123456',
+        });
+      } catch (error) {
+        expect(error).toBeDefined();
+      }
+    });
+
+    it('should be rejected if password is invalid', async () => {
+      try {
+        await authService.login({
+          email: 'testuser@gmail.com',
+          password: 'qwerty',
+        });
+      } catch (error) {
+        expect(error).toBeDefined();
+      }
+    });
+
+    it('should login user and return access token', async () => {
+      const result = await authService.login({
+        email: 'testuser@gmail.com',
+        password: '123456',
+      });
+
+      expect(result.user.id).toBeDefined();
+      expect(result.user.email).toBe('testuser@gmail.com');
+      expect(result.user.username).toBe('user_test');
+      expect(result.user.firstName).toBe('User');
+      expect(result.user.lastName).toBe('Test');
+      expect(result.user.role).toBe('USER');
+      expect(result.token).toBeDefined();
+    });
+  });
 });
