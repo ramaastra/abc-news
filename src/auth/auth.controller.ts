@@ -4,9 +4,9 @@ import {
   LoginUserRequest,
   LoginUserResponse,
   RegisterUserRequest,
-} from 'src/models/auth.model';
-import { UserResponse } from 'src/models/user.model';
-import { WebResponse } from 'src/models/web.model';
+} from '../models/auth.model';
+import { UserResponse } from '../models/user.model';
+import { WebResponse } from '../models/web.model';
 
 @Controller('auth')
 export class AuthController {

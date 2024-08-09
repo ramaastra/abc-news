@@ -1,14 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'src/common/prisma.service';
-import { BcryptService } from 'src/common/bcrypt.service';
-import { ValidationService } from 'src/common/validation.service';
+import { PrismaService } from '../common/prisma.service';
+import { BcryptService } from '../common/bcrypt.service';
+import { ValidationService } from '../common/validation.service';
 import {
   LoginUserRequest,
   LoginUserResponse,
   RegisterUserRequest,
-} from 'src/models/auth.model';
-import { UserResponse } from 'src/models/user.model';
+} from '../models/auth.model';
+import { UserResponse } from '../models/user.model';
 import { AuthValidation } from './auth.validation';
 
 @Injectable()
