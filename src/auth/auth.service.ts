@@ -1,9 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Req } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../common/prisma.service';
 import { BcryptService } from '../common/bcrypt.service';
 import { ValidationService } from '../common/validation.service';
 import {
+  JwtTokenPayload,
   LoginUserRequest,
   LoginUserResponse,
   RegisterUserRequest,
@@ -92,5 +93,9 @@ export class AuthService {
     });
 
     return { user, token };
+  }
+
+  async whoAmI(@Req() request: Request): Promise<JwtTokenPayload> {
+    return request['user'];
   }
 }

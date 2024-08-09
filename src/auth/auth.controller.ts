@@ -1,12 +1,14 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
+  JwtTokenPayload,
   LoginUserRequest,
   LoginUserResponse,
   RegisterUserRequest,
 } from '../models/auth.model';
 import { UserResponse } from '../models/user.model';
 import { WebResponse } from '../models/web.model';
+import { AuthGuard } from './auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -25,6 +27,13 @@ export class AuthController {
     @Body() request: LoginUserRequest,
   ): Promise<WebResponse<LoginUserResponse>> {
     const result = await this.authService.login(request);
+    return { data: result };
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('whoami')
+  async whoAmI(@Req() request: Request): Promise<WebResponse<JwtTokenPayload>> {
+    const result = await this.authService.whoAmI(request);
     return { data: result };
   }
 }

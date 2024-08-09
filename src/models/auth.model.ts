@@ -19,3 +19,10 @@ export class LoginUserResponse {
   user: UserResponse;
   token: string;
 }
+
+export class JwtTokenPayload {
+  sub: number;
+  username: string;
+  iat: number;
+  exp: number;
+}
