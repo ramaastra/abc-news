@@ -8,7 +8,7 @@ import {
 } from '../models/auth.model';
 import { UserResponse } from '../models/user.model';
 import { WebResponse } from '../models/web.model';
-import { AuthGuard } from './auth.guard';
+import { Auth } from './auth.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -30,8 +30,8 @@ export class AuthController {
     return { data: result };
   }
 
-  @UseGuards(AuthGuard)
   @Get('whoami')
+  @Auth()
   async whoAmI(@Req() request: Request): Promise<WebResponse<JwtTokenPayload>> {
     const result = await this.authService.whoAmI(request);
     return { data: result };
