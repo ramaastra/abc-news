@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { NewsCategoriesService } from './news-categories.service';
 import { WebResponse } from '../models/web.model';
 import {
@@ -15,6 +15,12 @@ export class NewsCategoriesController {
     @Body() request: NewsCategoryRequest,
   ): Promise<WebResponse<NewsCategoryResponse>> {
     const result = await this.newsCategoriesService.create(request);
+    return { data: result };
+  }
+
+  @Get()
+  async findAll(): Promise<WebResponse<NewsCategoryResponse[]>> {
+    const result = await this.newsCategoriesService.findAll();
     return { data: result };
   }
 }

@@ -40,4 +40,9 @@ export class NewsCategoriesService {
       },
     });
   }
+
+  async findAll(): Promise<NewsCategoryResponse[]> {
+    const newsCategories = await this.prismaService.newsCategory.findMany();
+    return newsCategories;
+  }
 }
