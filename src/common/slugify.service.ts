@@ -27,14 +27,14 @@ export class SlugifyService {
     return slug;
   }
 
-  generateSlug(text: string): string {
+  private generateSlug(text: string): string {
     return slugify(text, {
       remove: /[*+~.()'"!:@]/g,
       lower: true,
     });
   }
 
-  generateRandomChar(): string {
+  private generateRandomChar(): string {
     return crypto.randomUUID().split('-')[0];
   }
 }
