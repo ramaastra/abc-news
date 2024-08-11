@@ -11,8 +11,8 @@ import { JwtService } from '@nestjs/jwt';
 import { Role } from '@prisma/client';
 import { PrismaService } from '../common/prisma.service';
 import { JwtTokenPayload } from '../models/auth.model';
-import { ROLES_KEY } from './auth.decorator';
 import { UserResponse } from '../models/user.model';
+import { IS_PUBLIC_KEY, ROLES_KEY } from './auth.decorator';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -23,6 +23,14 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (isPublic) {
+      return true;
+    }
+
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request.headers);
     if (!token) {
