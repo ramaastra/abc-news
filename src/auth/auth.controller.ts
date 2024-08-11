@@ -8,13 +8,14 @@ import {
 } from '../models/auth.model';
 import { UserResponse } from '../models/user.model';
 import { WebResponse } from '../models/web.model';
-import { Auth } from './auth.decorator';
+import { Auth, Public } from './auth.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
+  @Public()
   async register(
     @Body() request: RegisterUserRequest,
   ): Promise<WebResponse<UserResponse>> {
@@ -23,6 +24,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @Public()
   async login(
     @Body() request: LoginUserRequest,
   ): Promise<WebResponse<LoginUserResponse>> {
