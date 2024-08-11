@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Role } from '@prisma/client';
 import { PrismaService } from '../src/common/prisma.service';
 import { BcryptService } from '../src/common/bcrypt.service';
 
@@ -17,7 +18,7 @@ export class TestService {
     });
   }
 
-  async createUser() {
+  async createUser(role: Role = 'USER') {
     await this.prismaService.user.create({
       data: {
         email: 'testuser@gmail.com',
@@ -25,7 +26,7 @@ export class TestService {
         firstName: 'User',
         lastName: 'Test',
         password: await this.bcryptService.generateHash('123456'),
-        role: 'USER',
+        role,
       },
     });
   }
