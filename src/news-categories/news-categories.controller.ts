@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Patch,
+  Delete,
 } from '@nestjs/common';
 import { Auth, Public } from '../auth/auth.decorator';
 import { WebResponse } from '../models/web.model';
@@ -52,6 +53,15 @@ export class NewsCategoriesController {
     @Body() request: UpdateNewsCategoryRequest,
   ): Promise<WebResponse<NewsCategoryResponse>> {
     const result = await this.newsCategoriesService.update(id, request);
+    return { data: result };
+  }
+
+  @Delete(':id')
+  @Auth('ADMIN')
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<WebResponse<boolean>> {
+    const result = await this.newsCategoriesService.remove(id);
     return { data: result };
   }
 }

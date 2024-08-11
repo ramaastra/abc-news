@@ -100,4 +100,18 @@ export class NewsCategoriesService {
 
     return updatedNewsCategory;
   }
+
+  async remove(id: number): Promise<boolean> {
+    const isExist = await this.prismaService.newsCategory.findUnique({
+      where: { id },
+    });
+    if (!isExist) {
+      throw new HttpException(`Category with id ${id} does not exist`, 400);
+    }
+
+    await this.prismaService.newsCategory.delete({
+      where: { id },
+    });
+    return true;
+  }
 }
