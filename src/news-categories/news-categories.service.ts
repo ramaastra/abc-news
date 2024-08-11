@@ -45,4 +45,14 @@ export class NewsCategoriesService {
     const newsCategories = await this.prismaService.newsCategory.findMany();
     return newsCategories;
   }
+
+  async findOne(id: number): Promise<NewsCategoryResponse> {
+    const newsCategory = await this.prismaService.newsCategory.findUnique({
+      where: { id },
+    });
+    if (!newsCategory) {
+      throw new HttpException(`Category with id ${id} does not exist`, 400);
+    }
+    return newsCategory;
+  }
 }

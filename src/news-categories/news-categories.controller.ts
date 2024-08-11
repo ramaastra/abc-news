@@ -1,4 +1,11 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { Auth, Public } from '../auth/auth.decorator';
 import { WebResponse } from '../models/web.model';
 import {
@@ -24,6 +31,15 @@ export class NewsCategoriesController {
   @Public()
   async findAll(): Promise<WebResponse<NewsCategoryResponse[]>> {
     const result = await this.newsCategoriesService.findAll();
+    return { data: result };
+  }
+
+  @Get(':id')
+  @Public()
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<WebResponse<NewsCategoryResponse>> {
+    const result = await this.newsCategoriesService.findOne(id);
     return { data: result };
   }
 }
