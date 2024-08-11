@@ -96,6 +96,10 @@ export class AuthService {
   }
 
   async whoAmI(@Req() request: Request): Promise<JwtTokenPayload> {
-    return request['user'];
+    const user = request['user'];
+    if (!user) {
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    }
+    return user;
   }
 }
