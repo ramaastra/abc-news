@@ -9,4 +9,15 @@ export class NewsCategoriesValidation {
       .string({ message: 'Description is required' })
       .min(6, { message: 'Description must be 6 or more characters long' }),
   });
+
+  static readonly UPDATE: ZodType = z.object({
+    name: z
+      .string()
+      .max(30, { message: 'Name must be 15 or fewer characters long' })
+      .optional(),
+    description: z
+      .string()
+      .min(6, { message: 'Description must be 6 or more characters long' })
+      .optional(),
+  });
 }

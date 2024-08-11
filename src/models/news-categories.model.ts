@@ -11,3 +11,8 @@ export class CreateNewsCategoryRequest {
   name: string;
   description: string;
 }
+
+export class UpdateNewsCategoryRequest {
+  name?: string;
+  description?: string;
+}

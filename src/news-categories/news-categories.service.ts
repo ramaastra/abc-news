@@ -5,6 +5,7 @@ import { ValidationService } from '../common/validation.service';
 import {
   CreateNewsCategoryRequest,
   NewsCategoryResponse,
+  UpdateNewsCategoryRequest,
 } from '../models/news-categories.model';
 import { NewsCategoriesValidation } from './news-categories.validation';
 
@@ -56,5 +57,47 @@ export class NewsCategoriesService {
       throw new HttpException(`Category with id ${id} does not exist`, 400);
     }
     return newsCategory;
+  }
+
+  async update(
+    id: number,
+    request: UpdateNewsCategoryRequest,
+  ): Promise<NewsCategoryResponse> {
+    const updateNewsCategoryRequest: UpdateNewsCategoryRequest =
+      this.validationService.validate(NewsCategoriesValidation.UPDATE, request);
+
+    const newsCategory = await this.prismaService.newsCategory.findUnique({
+      where: { id },
+    });
+    if (!newsCategory) {
+      throw new HttpException(`Category with id ${id} does not exist`, 400);
+    }
+
+    if (
+      updateNewsCategoryRequest.name &&
+      updateNewsCategoryRequest.name !== newsCategory.name
+    ) {
+      const isExist = await this.prismaService.newsCategory.findUnique({
+        where: { name: updateNewsCategoryRequest.name },
+      });
+      if (isExist) {
+        throw new HttpException(
+          `Category '${updateNewsCategoryRequest.name}' is already exist`,
+          400,
+        );
+      }
+
+      const slug = await this.slugifyService.generateNewsCategoryNameSlug(
+        updateNewsCategoryRequest.name,
+      );
+      updateNewsCategoryRequest['slug'] = slug;
+    }
+
+    const updatedNewsCategory = await this.prismaService.newsCategory.update({
+      where: { id },
+      data: updateNewsCategoryRequest,
+    });
+
+    return updatedNewsCategory;
   }
 }

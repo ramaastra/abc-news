@@ -5,12 +5,14 @@ import {
   Body,
   Param,
   ParseIntPipe,
+  Patch,
 } from '@nestjs/common';
 import { Auth, Public } from '../auth/auth.decorator';
 import { WebResponse } from '../models/web.model';
 import {
   CreateNewsCategoryRequest,
   NewsCategoryResponse,
+  UpdateNewsCategoryRequest,
 } from '../models/news-categories.model';
 import { NewsCategoriesService } from './news-categories.service';
 
@@ -41,5 +43,14 @@ export class NewsCategoriesController {
   ): Promise<WebResponse<NewsCategoryResponse>> {
     const result = await this.newsCategoriesService.findOne(id);
     return { data: result };
+  }
+
+  @Patch(':id')
+  @Auth('ADMIN')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() request: UpdateNewsCategoryRequest,
+  ) {
+    return this.newsCategoriesService.update(id, request);
   }
 }
