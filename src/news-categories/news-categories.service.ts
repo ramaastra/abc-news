@@ -3,7 +3,7 @@ import { PrismaService } from '../common/prisma.service';
 import { SlugifyService } from '../common/slugify.service';
 import { ValidationService } from '../common/validation.service';
 import {
-  NewsCategoryRequest,
+  CreateNewsCategoryRequest,
   NewsCategoryResponse,
 } from '../models/news-categories.model';
 import { NewsCategoriesValidation } from './news-categories.validation';
@@ -16,8 +16,10 @@ export class NewsCategoriesService {
     private validationService: ValidationService,
   ) {}
 
-  async create(request: NewsCategoryRequest): Promise<NewsCategoryResponse> {
-    const newsCategoryRequest: NewsCategoryRequest =
+  async create(
+    request: CreateNewsCategoryRequest,
+  ): Promise<NewsCategoryResponse> {
+    const newsCategoryRequest: CreateNewsCategoryRequest =
       this.validationService.validate(NewsCategoriesValidation.CREATE, request);
 
     const isExist = await this.prismaService.newsCategory.findUnique({

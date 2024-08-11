@@ -7,7 +7,7 @@ export class NewsCategoryResponse {
   updatedAt: Date;
 }
 
-export class NewsCategoryRequest {
+export class CreateNewsCategoryRequest {
   name: string;
   description: string;
 }

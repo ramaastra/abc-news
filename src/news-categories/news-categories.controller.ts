@@ -9,7 +9,7 @@ import {
 import { Auth, Public } from '../auth/auth.decorator';
 import { WebResponse } from '../models/web.model';
 import {
-  NewsCategoryRequest,
+  CreateNewsCategoryRequest,
   NewsCategoryResponse,
 } from '../models/news-categories.model';
 import { NewsCategoriesService } from './news-categories.service';
@@ -21,7 +21,7 @@ export class NewsCategoriesController {
   @Post()
   @Auth('ADMIN')
   async create(
-    @Body() request: NewsCategoryRequest,
+    @Body() request: CreateNewsCategoryRequest,
   ): Promise<WebResponse<NewsCategoryResponse>> {
     const result = await this.newsCategoriesService.create(request);
     return { data: result };
