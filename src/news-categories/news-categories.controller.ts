@@ -47,10 +47,11 @@ export class NewsCategoriesController {
 
   @Patch(':id')
   @Auth('ADMIN')
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() request: UpdateNewsCategoryRequest,
-  ) {
-    return this.newsCategoriesService.update(id, request);
+  ): Promise<WebResponse<NewsCategoryResponse>> {
+    const result = await this.newsCategoriesService.update(id, request);
+    return { data: result };
   }
 }
