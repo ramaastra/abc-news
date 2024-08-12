@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Role } from '@prisma/client';
+import { NewsCategory, Role } from '@prisma/client';
 import { PrismaService } from '../src/common/prisma.service';
 import { BcryptService } from '../src/common/bcrypt.service';
 
@@ -28,6 +28,28 @@ export class TestService {
         password: await this.bcryptService.generateHash('123456'),
         role,
       },
+    });
+  }
+
+  async deleteNewsCategory() {
+    await this.prismaService.newsCategory.deleteMany({
+      where: { name: 'Test Category' },
+    });
+  }
+
+  async createNewsCategory() {
+    await this.prismaService.newsCategory.create({
+      data: {
+        slug: 'test-category',
+        name: 'Test Category',
+        description: 'This is just a dummy category used for testing purpose',
+      },
+    });
+  }
+
+  async getNewsCategory(): Promise<NewsCategory> {
+    return await this.prismaService.newsCategory.findUnique({
+      where: { name: 'Test Category' },
     });
   }
 }
