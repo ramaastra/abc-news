@@ -14,7 +14,7 @@ export class SlugifyService {
     const isExist = await this.prismaService.newsCategory.findUnique({
       where: { slug },
     });
-    if (isExist) slug += this.generateRandomChar();
+    if (isExist) slug += '-' + this.generateRandomChar();
     return slug;
   }
 
@@ -23,7 +23,7 @@ export class SlugifyService {
     const isExist = await this.prismaService.news.findUnique({
       where: { slug },
     });
-    if (isExist) slug += this.generateRandomChar();
+    if (isExist) slug += '-' + this.generateRandomChar();
     return slug;
   }
 
