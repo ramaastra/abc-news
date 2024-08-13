@@ -32,7 +32,7 @@ export class NewsController {
   async create(
     @User() user: UserResponse,
     @Body() request: CreateNewsRequest,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file?: Express.Multer.File,
   ): Promise<WebResponse<NewsResponse>> {
     const result = await this.newsService.create(user, request, file);
     return { data: result };
@@ -58,12 +58,14 @@ export class NewsController {
 
   @Patch(':id')
   @Auth()
+  @UseInterceptors(FileInterceptor('image'))
   async update(
     @User() user: UserResponse,
     @Param('id', ParseIntPipe) id: number,
     @Body() request: UpdateNewsRequest,
+    @UploadedFile() file?: Express.Multer.File,
   ): Promise<WebResponse<NewsResponse>> {
-    const result = await this.newsService.update(user, id, request);
+    const result = await this.newsService.update(user, id, request, file);
     return { data: result };
   }
 

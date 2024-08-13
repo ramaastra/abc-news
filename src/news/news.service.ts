@@ -119,9 +119,18 @@ export class NewsService {
     user: UserResponse,
     id: number,
     request: UpdateNewsRequest,
+    file?: Express.Multer.File,
   ): Promise<NewsResponse> {
+    if (file) {
+      const pictureUrl = await this.imageKitService.upload(file);
+      request.pictureUrl = pictureUrl;
+    }
+
     const updateNewsRequest: UpdateNewsRequest =
-      this.validationService.validate(NewsValidation.UPDATE, request);
+      this.validationService.validate(NewsValidation.UPDATE, {
+        ...request,
+        categoryId: +request.categoryId,
+      });
 
     const news = await this.prismaService.news.findUnique({
       where: { id },
