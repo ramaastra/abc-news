@@ -12,9 +12,11 @@ export class AuthValidation {
       .min(6, { message: 'Password must be 6 or more characters long' }),
     firstName: z.string(),
     lastName: z.string(),
-    role: z.enum(['ADMIN', 'USER'], {
-      message: 'Role expected to be ADMIN or USER',
-    }),
+    role: z
+      .enum(['ADMIN', 'USER'], {
+        message: 'Role expected to be ADMIN or USER',
+      })
+      .optional(),
   });
 
   static readonly LOGIN: ZodType = z.object({

@@ -43,6 +43,10 @@ export class AuthService {
     registerUserRequest.password = await this.bcryptService.generateHash(
       registerUserRequest.password,
     );
+
+    if (!registerUserRequest.role) {
+      registerUserRequest.role = 'USER';
+    }
     return this.prismaService.user.create({
       data: registerUserRequest,
       select: {
