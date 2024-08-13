@@ -42,8 +42,9 @@ export class NewsController {
   @Public()
   async findAll(
     @Query('author') authorUsername?: string,
+    @Query('category') newsCategory?: string,
   ): Promise<WebResponse<NewsResponse[]>> {
-    const result = await this.newsService.findAll(authorUsername);
+    const result = await this.newsService.findAll(authorUsername, newsCategory);
     return { data: result };
   }
 
