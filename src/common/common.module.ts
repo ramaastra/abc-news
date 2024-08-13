@@ -5,6 +5,7 @@ import { PrismaService } from './prisma.service';
 import { BcryptService } from './bcrypt.service';
 import { ValidationService } from './validation.service';
 import { SlugifyService } from './slugify.service';
+import { ImageKitService } from './imagekit.service';
 
 @Global()
 @Module({
@@ -13,11 +14,18 @@ import { SlugifyService } from './slugify.service';
     BcryptService,
     ValidationService,
     SlugifyService,
+    ImageKitService,
     {
       provide: APP_FILTER,
       useClass: ErrorFilter,
     },
   ],
-  exports: [PrismaService, BcryptService, ValidationService, SlugifyService],
+  exports: [
+    PrismaService,
+    BcryptService,
+    ValidationService,
+    SlugifyService,
+    ImageKitService,
+  ],
 })
 export class CommonModule {}

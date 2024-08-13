@@ -7,7 +7,10 @@ import {
   ParseIntPipe,
   Patch,
   Delete,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Auth, Public, User } from '../auth/auth.decorator';
 import { WebResponse } from '../models/web.model';
 import {
@@ -24,11 +27,13 @@ export class NewsController {
 
   @Post()
   @Auth('USER')
+  @UseInterceptors(FileInterceptor('image'))
   async create(
     @User() user: UserResponse,
     @Body() request: CreateNewsRequest,
+    @UploadedFile() file: Express.Multer.File,
   ): Promise<WebResponse<NewsResponse>> {
-    const result = await this.newsService.create(user, request);
+    const result = await this.newsService.create(user, request, file);
     return { data: result };
   }
 

@@ -1,6 +1,7 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/prisma.service';
 import { SlugifyService } from '../common/slugify.service';
+import { ImageKitService } from '../common/imagekit.service';
 import { ValidationService } from '../common/validation.service';
 import {
   CreateNewsRequest,
@@ -16,6 +17,7 @@ export class NewsService {
   constructor(
     private prismaService: PrismaService,
     private slugifyService: SlugifyService,
+    private imageKitService: ImageKitService,
     private validationService: ValidationService,
   ) {}
 
@@ -46,10 +48,16 @@ export class NewsService {
   async create(
     user: UserResponse,
     request: CreateNewsRequest,
+    file?: Express.Multer.File,
   ): Promise<NewsResponse> {
+    if (file) {
+      const pictureUrl = await this.imageKitService.upload(file);
+      request.pictureUrl = pictureUrl;
+    }
+
     const newsRequest: CreateNewsRequest = this.validationService.validate(
       NewsValidation.CREATE,
-      request,
+      { ...request, categoryId: +request.categoryId },
     );
 
     const isCategoryExist = await this.prismaService.newsCategory.findUnique({
