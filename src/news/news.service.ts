@@ -88,8 +88,11 @@ export class NewsService {
     return this.formatNewsData(news);
   }
 
-  async findAll(): Promise<NewsResponse[]> {
+  async findAll(authorUsername?: string): Promise<NewsResponse[]> {
     const news = await this.prismaService.news.findMany({
+      where: {
+        author: { username: authorUsername },
+      },
       include: {
         category: true,
         author: true,

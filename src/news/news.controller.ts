@@ -9,6 +9,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  Query,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Auth, Public, User } from '../auth/auth.decorator';
@@ -39,8 +40,10 @@ export class NewsController {
 
   @Get()
   @Public()
-  async findAll(): Promise<WebResponse<NewsResponse[]>> {
-    const result = await this.newsService.findAll();
+  async findAll(
+    @Query('author') authorUsername?: string,
+  ): Promise<WebResponse<NewsResponse[]>> {
+    const result = await this.newsService.findAll(authorUsername);
     return { data: result };
   }
 
