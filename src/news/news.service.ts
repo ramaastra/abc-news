@@ -133,10 +133,13 @@ export class NewsService {
       request.pictureUrl = pictureUrl;
     }
 
+    if (request.categoryId) {
+      request.categoryId = +request.categoryId;
+    }
+
     const updateNewsRequest: UpdateNewsRequest =
       this.validationService.validate(NewsValidation.UPDATE, {
         ...request,
-        categoryId: +request.categoryId,
       });
 
     const news = await this.prismaService.news.findUnique({
